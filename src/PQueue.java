@@ -139,7 +139,7 @@ public class PQueue <T extends Comparable<T>> {
 
         // Keep swimming until we have not reached the
         // root and while we are less than our parent
-        while(k > 0); less(k, parent)) {
+        while(k > 0 && less(k, parent)) {
 
             // Exchange k with parent
             swap( parent, k);
@@ -177,10 +177,9 @@ public class PQueue <T extends Comparable<T>> {
         T i_elem = heap.get(i);
         T j_elem = heap.get(j);
 
-        heap.set(i, i_elem);
-        heap.set(j, j_elem);
-
-        mapSwap(i_elem, j_elem, i, j);
+        heap.set(i, j_elem);
+        heap.set(j, i_elem);
+        mapSwap(i_elem, j_elem, j, i);
     }
 
 
@@ -198,6 +197,7 @@ public class PQueue <T extends Comparable<T>> {
 
         // Logarithmic removal with map, O(log(n))
         Integer index = mapGet(element);
+        System.out.println(index);
         if(index != null) removeAt(index);
         return index != null;
     }
@@ -255,10 +255,51 @@ public class PQueue <T extends Comparable<T>> {
     // Add a node value and it's index to the map
     private void mapAdd(T value, int index) {
 
-        TreeSet <Integer> set = map.get(value);
+        TreeSet <Integer> set = map.get(value);         // Set of indecies
 
         // New value being inserted into the map
-        if ()
+        if (set == null) {
+
+            set = new TreeSet<>();
+            set.add(index);
+            map.put(value, set);        // Check this line
+
+        // Value already exists in map
+        } else set.add(index);     // I think it should go below
     }
+
+    // Removes the index at a given value, O(log(n))
+    private void mapRemove(T value, int index) {
+        TreeSet <Integer> set = map.get(value);
+        set.remove(index); // TreeSets take O(log(n)) time for removal
+        if (set.size() == 0) map.remove(value);
+    }
+
+    // Extract an index position for the given value
+    // NOTE: If a value exists multiple times in the heap the highest
+    // index is returned (this is arbitrarily been chosen)
+    private Integer mapGet(T value) {
+        TreeSet<Integer> set = map.get(value);
+        if (set != null) return set.last();
+        return null;
+    }
+
+    // Exchange index of two nodes internally within the map
+    private void mapSwap(T val1, T val2, int val1Index, int val2Index) {
+
+        Set <Integer> set1 = map.get(val1);
+        Set <Integer> set2 = map.get(val2);
+
+        set1.remove(val1Index);
+        set2.remove(val2Index);
+
+        set1.add(val2Index);
+        set2.add(val1Index);
+    }
+
+    @Override public String toString() {
+        return heap.toString();
+    }
+
 
 }

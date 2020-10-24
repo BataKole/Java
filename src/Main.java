@@ -1,15 +1,19 @@
 class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!"); // Display the string.3
-        Niz<Integer> niz = new Niz<>(10);
-        DoublyLinkedList<Integer> dvostrukoPovezanaLista = new DoublyLinkedList<Integer>();
+        System.out.println("Hello World!");
 
-        dvostrukoPovezanaLista.addFirst(1);
-        dvostrukoPovezanaLista.addFirst(1);
-        dvostrukoPovezanaLista.addFirst(1);
-        dvostrukoPovezanaLista.addLast(3);
+        PQueue<Integer> kju = new PQueue<>();
 
+        kju.add(1);
+        kju.add(1);
+        kju.add(2);
+        kju.add(2);
+        kju.add(3);
+        kju.add(0);
+        kju.add(-1);
 
-        System.out.println(dvostrukoPovezanaLista.toString());
+        while(!kju.isEmpty())
+            System.out.println(kju.poll());
+
     }
 }
