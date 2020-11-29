@@ -33,12 +33,17 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
     public boolean add(T elem) {
 
+        Node cur = null;
         // Check if elem already exists in tree,
         // if it does, ignore adding it
         if(contains(elem)) return false;
         // Otherwise add the element to the binary tree
         else {
-            root = add(root, elem);
+            if (nodeCount == 0) {
+                root = add(root, elem);
+                cur = root;
+            }
+            else{cur = add(cur, elem);}
             nodeCount++;
             return true;
         }
@@ -51,8 +56,10 @@ public class BinarySearchTree <T extends Comparable<T>> {
         if(node == null) {
             node = new Node(null, null, elem);
         } else {
-            if(elem.compareTo(node.data) < 0) return add(node.left, elem);
-            else return add(node.right, elem);
+            if(elem.compareTo(node.data) < 0){
+                System.out.println("Dodat levo"+ node.data);
+                return add(node.left, elem);}
+            else{System.out.println("Dodat desno" + node.data); return add(node.right, elem);}
         }
 
         return node;
@@ -120,6 +127,8 @@ public class BinarySearchTree <T extends Comparable<T>> {
         return cur;
     }
 
+
+
     public boolean contains(T elem) {
         return contains(root, elem);
     }
@@ -148,5 +157,20 @@ public class BinarySearchTree <T extends Comparable<T>> {
         return Math.max(height(node.left), height(node.right)) + 1;
     }
 
+    public void traverse(TreeTraversalOrder order){
+        switch (order) {
+            case PRE_ORDER: traversePreOrder(root);
+        }
+    }
+
+    private void traversePreOrder(Node cur){
+
+        System.out.println(cur.data);
+
+        if(cur.left != null){ System.out.println("ima levi");
+            traversePreOrder(cur.left);}
+        if(cur.right != null){ System.out.println("ima desni");
+            traversePreOrder(cur.right);}
+    }
 
 }
