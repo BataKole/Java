@@ -33,33 +33,33 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
     public boolean add(T elem) {
 
-        Node cur = null;
-        // Check if elem already exists in tree,
-        // if it does, ignore adding it
-        if(contains(elem)) return false;
-        // Otherwise add the element to the binary tree
-        else {
-            if (nodeCount == 0) {
-                root = add(root, elem);
-                cur = root;
-            }
-            else{cur = add(cur, elem);}
+        // Check if the value already exists in this
+        // binary tree, if it does ignore adding it
+        if (contains(elem)) {
+            return false;
+
+            // Otherwise add this element to the binary tree
+        } else {
+            root = add(root, elem);
             nodeCount++;
             return true;
         }
     }
 
-    // private method to recursively add Node to the tree
+    // Private method to recursively add a value in the binary tree
     private Node add(Node node, T elem) {
 
-        // Base case: found the leaf Node
-        if(node == null) {
+        // Base case: found a leaf node
+        if (node == null) {
             node = new Node(null, null, elem);
+
         } else {
-            if(elem.compareTo(node.data) < 0){
-                System.out.println("Dodat levo"+ node.data);
-                return add(node.left, elem);}
-            else{System.out.println("Dodat desno" + node.data); return add(node.right, elem);}
+            // Pick a subtree to insert element
+            if (elem.compareTo(node.data) < 0) {
+                node.left = add(node.left, elem);
+            } else {
+                node.right = add(node.right, elem);
+            }
         }
 
         return node;
@@ -159,7 +159,11 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
     public void traverse(TreeTraversalOrder order){
         switch (order) {
-            case PRE_ORDER: traversePreOrder(root);
+            case PRE_ORDER: System.out.println("traversePreOrder");traversePreOrder(root);
+            case IN_ORDER:System.out.println("traverseInOrder"); traverseInOrder(root);
+            case POST_ORDER: System.out.println("traversePostOrder");traversePostOrder(root);
+            case LEVEL_ORDER: System.out.println("traverseLevelOrder");traverseLevelOrder(root);
+            default: return ;
         }
     }
 
@@ -167,10 +171,46 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
         System.out.println(cur.data);
 
-        if(cur.left != null){ System.out.println("ima levi");
+        if(cur.left != null){ System.out.println("Levo -> ");
             traversePreOrder(cur.left);}
-        if(cur.right != null){ System.out.println("ima desni");
+        if(cur.right != null){System.out.println("Desno -> ");
             traversePreOrder(cur.right);}
     }
 
+    private void traverseInOrder(Node cur){
+
+        if(cur.left != null){ System.out.println("Levo -> ");
+            traverseInOrder(cur.left);}
+
+        System.out.println(cur.data);
+
+        if(cur.right != null){ System.out.println("Desno -> ");
+            traverseInOrder(cur.right);}
+    }
+
+    private void traversePostOrder(Node cur){
+
+        if(cur.left != null){System.out.println("Levo -> ");
+            traversePostOrder(cur.left);}
+
+        if(cur.right != null){ System.out.println("Desno -> ");
+            traversePostOrder(cur.right);}
+
+        System.out.println(cur.data);
+    }
+    private void traverseLevelOrder(Node cur){
+
+        Queue<Node> queue = new Queue<Node>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+            System.out.println(queue.peek().data);
+            if(queue.peek().left != null){System.out.println("Levo -> "); queue.offer(queue.peek().left);}
+            if(queue.peek().right != null){System.out.println("Desno -> "); queue.offer(queue.peek().right);}
+            queue.poll();
+        }
+
+
+    }
 }
