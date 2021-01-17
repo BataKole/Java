@@ -1,32 +1,29 @@
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.Iterator;
 
 class Main {
 
-    static int[] a= {1,2,3,4,5};
+
+    public static void main(String[] args) {
+
+        BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+
+        bst.add(3);
+        bst.add(1);
+        bst.add(2);
+        bst.add(4);
+        bst.add(6);
+        bst.add(5);
+        bst.add(7);
 
 
-    public static void main(String[] args)  throws IOException{
 
-        UnionFind uf = new UnionFind(5);
+        bst.traverse(TreeTraversalOrder.PRE_ORDER);
 
-        broj();
+        bst.traverse(TreeTraversalOrder.IN_ORDER);
 
+        bst.traverse(TreeTraversalOrder.POST_ORDER);
 
-
+        bst.traverse(TreeTraversalOrder.LEVEL_ORDER);
     }
 
-    public static void broj()throws IOException {
-        System.out.println(a[5]);
-
-    }
-
-    public static void handle() throws IOException{
-
-        try {
-            broj();
-        } catch ( IOException e){
-            System.out.println("Exception");
-        }
-    }
 }
