@@ -34,7 +34,6 @@ public class BinarySearchTree <T extends Comparable<T>>{
 
         // Check if the value already exists int
         // this binary tree, if it does ignore adding it
-
         if(contains(elem)) {
             return false;
 
@@ -44,7 +43,6 @@ public class BinarySearchTree <T extends Comparable<T>>{
             nodeCount++;
             return true;
         }
-
     }
 
     // Private method to recursively add a value in the binary tree
@@ -143,7 +141,6 @@ public class BinarySearchTree <T extends Comparable<T>>{
                 // node.left = remove(node.left, tmp.data);
             }
         }
-        
         return node;
     }
 
@@ -197,5 +194,156 @@ public class BinarySearchTree <T extends Comparable<T>>{
     private int height(Node node) {
         if (node == null) return 0;
         return Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    // This method returns an iterator for a given TreeTraversalOrder.
+    // The ways you can traverse the tree are these four:
+    // preorder, inorder, postorder and levelorder.
+    public java.util.Iterator <T> traverse(TreeTraversalOrder order) {
+        switch (order) {
+            case PRE_ORDER: return preOrderTraversal();
+            case IN_ORDER: return inOrderTraversal();
+            case POST_ORDER: return postOrderTraversal();
+            case LEVEL_ORDER: return levelOrderTraversal();
+            default: return null;
+        }
+    }
+
+    // Returns as iterator to traverse the tree in pre order
+    private java.util.Iterator <T> preOrderTraversal() {
+        final int expectedNodeCount = nodeCount;
+        final java.util.Stack<Node> stack = new java.util.Stack<>();
+        stack.push(root);
+
+        return new java.util.Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                return root != null && !stack.isEmpty();
+            }
+
+            @Override
+            public T next() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                Node node = stack.pop();
+                if (node.right != null) stack.push(node.right);
+                if (node.left != null) stack.push(node.left);
+                return node.data;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    // Returns as iterator to traverse the tree in pre order
+    private java.util.Iterator <T> inOrderTraversal() {
+
+        final int expectedNodeCount = nodeCount;
+        final java.util.Stack<Node> stack = new java.util.Stack<>();
+        stack.push(root);
+
+        return new java.util.Iterator<T>() {
+            Node trav = root;
+
+            @Override
+            public boolean hasNext() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                return root != null && !stack.isEmpty();
+            }
+
+            @Override
+            public T next() {
+
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+
+                // Dig left
+                while (trav != null && trav.left != null) {
+                    stack.push(trav.left);
+                    trav = trav.left;
+                }
+
+                Node node = stack.pop();
+
+                // Try moving down right once
+                if (node.right != null) {
+                    stack.push(node.right);
+                    trav = node.right;
+                }
+
+                return node.data;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    // Returns as iterator to traverse the tree in pre order
+    private java.util.Iterator <T> postOrderTraversal() {
+        final int expectedNodeCount = nodeCount;
+        final java.util.Stack<Node> stack1 = new java.util.Stack<>();
+        final java.util.Stack<Node> stack2 = new java.util.Stack<>();
+        stack1.push(root);
+        while (!stack1.isEmpty()) {
+            Node node = stack1.pop();
+            if (node != null) {
+                stack2.push(node);
+                if (node.left != null) stack1.push(node.left);
+                if (node.right != null) stack1.push(node.right);
+            }
+        }
+        return new java.util.Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                return root != null && !stack2.isEmpty();
+            }
+
+            @Override
+            public T next() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                return stack2.pop().data;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    // Returns as iterator to traverse the tree in pre order
+    private java.util.Iterator <T> levelOrderTraversal() {
+
+        final int expectedNodeCount = nodeCount;
+        final java.util.Queue<Node> queue = new java.util.LinkedList<>();
+        queue.offer(root);
+
+        return new java.util.Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                return root != null && !queue.isEmpty();
+            }
+
+            @Override
+            public T next() {
+                if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+                Node node = queue.poll();
+                if (node.left != null) queue.offer(node.left);
+                if (node.right != null) queue.offer(node.right);
+                return node.data;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }
