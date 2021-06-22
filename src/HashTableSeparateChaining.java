@@ -71,7 +71,7 @@ public class HashTableSeparateChaining <K,V> implements Iterable <K>{
     // Converts a hash value to an index. Essentially, this strips the
     // negative sign and places the hash value in the domain [0, capacity)
     private int normalizeIndex(int keyHash) {
-        return (keyHash & 0x7FFFFFFF);
+        return (keyHash & 0x7FFFFFFF) % capacity;
     }
 
     // Clears all the contents of the hash-table
@@ -141,14 +141,14 @@ public class HashTableSeparateChaining <K,V> implements Iterable <K>{
         LinkedList <Entry<K,V>> bucket = table[bucketIndex];
         if (bucket == null) table[bucketIndex] = bucket = new LinkedList<>();
 
-        Entry <K,V> existantEntry = bucketSeekEntry(bucketIndex, entry.key);
-        if(existantEntry == null) {
+        Entry <K,V> existentEntry = bucketSeekEntry(bucketIndex, entry.key);
+        if(existentEntry == null) {
             bucket.add(entry);
             if(++size > threshold) resizeTable();
             return null; // Use null to indicate that there was not previous entry
         } else {
-            V oldVal = existantEntry.value;
-            existantEntry.value = entry.value;
+            V oldVal = existentEntry.value;
+            existentEntry.value = entry.value;
             return oldVal;
         }
     }
