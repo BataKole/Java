@@ -1,8 +1,7 @@
-/*
+package hashtable;/*
  * An implementation of a hash-table using separate chaining with a linked list.
  */
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
