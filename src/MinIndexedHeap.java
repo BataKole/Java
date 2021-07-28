@@ -76,7 +76,7 @@ public class MinIndexedHeap <T extends Comparable<T>>{
     }
 
     @SuppressWarnings("unchecked")
-    public T peedMinValue() {
+    public T peekMinValue() {
         isNotEmptyOrThrow();
         return (T) values[im[0]];
     }
@@ -90,7 +90,7 @@ public class MinIndexedHeap <T extends Comparable<T>>{
     public void insert(int ki, T value) {
         if (contains(ki))
             throw new IllegalArgumentException("index already exists; received: " + ki);
-        valueNotNullOrThrow();
+        valueNotNullOrThrow(value);
         pm[ki] = sz;
         im[sz] = ki;
         values[ki] = value;
